@@ -136,7 +136,7 @@
         /// <exception cref="FluentCheckException">The check fails.</exception>
         public void ExecuteNotChainableCheck(Action action, string negatedExceptionMessage)
         {
-            // Should store the lambda
+            // Should store the lambda & the negated exception message
             this.action = action;
             this.negatedExceptionMessage = negatedExceptionMessage;
         }

@@ -47,6 +47,18 @@ namespace NFluent.Tests
         }
 
         [Test]
+        public void ShouldExecuteAllRegisteredChecksInOnceEvenWithNotOperatorInvolved()
+        {
+            var bienOuBien = true;
+            var lazyChecks = new LazyChecks();
+
+            lazyChecks.That(bienOuBien).Not.IsFalse();
+            lazyChecks.That('.').Not.IsALetter();
+
+            lazyChecks.Execute();
+        }
+
+        [Test]
         [ExpectedException(typeof(NullReferenceException))]
         public void ShouldNotWorkProperlyWhenAtLeastOneLazyCheckIsImplementedWithoutChecker()
         {
@@ -62,5 +74,20 @@ namespace NFluent.Tests
 
             lazyChecks.Execute();
         }
+
+        //// Another draft from Cyrille:
+        ////var mine = Contract.CreateOn<int>();
+
+        ////mine.AddRule().IsPositive();
+        ////mine.AddRule().IsOdd();
+
+        ////mine.CheckThat(4);
+
+
+
+        ////var mine = Check.CreateComplex();
+
+        ////mine.CheckThat(x).
+        ////mine.CheckThat(y)...
     }
 }

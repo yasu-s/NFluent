@@ -165,13 +165,10 @@ namespace NFluent
         {
             if (typeof(T).IsNullable())
             {
-                return this.checker.ExecuteCheck(
-                    () => IsInstanceHelper.IsDifferentType(typeof(T), typeof(TU), this.Value),
-                    IsInstanceHelper.BuildErrorMessageForNullable(typeof(T), typeof(TU), this.Value, false));
+                return this.checker.ExecuteCheck(() => IsInstanceHelper.IsDifferentType(typeof(T), typeof(TU), this.Value), IsInstanceHelper.BuildErrorMessageForNullable(typeof(T), typeof(TU), this.Value, false));
             }
 
-            return this.checker.ExecuteCheck(
-                () => IsInstanceHelper.IsNotInstanceOf(this.Value, typeof(TU)), IsInstanceHelper.BuildErrorMessage(this.Value, typeof(TU), false));
+            return this.checker.ExecuteCheck(() => IsInstanceHelper.IsNotInstanceOf(this.Value, typeof(TU)), IsInstanceHelper.BuildErrorMessage(this.Value, typeof(TU), false));
         }
 
         #endregion
