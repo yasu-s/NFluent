@@ -149,6 +149,9 @@
     <Compile Include="..\NFluent.35\Extensibility\IChecker.cs">
       <Link>Extensibility\IChecker.cs</Link>
     </Compile>
+    <Compile Include="..\NFluent.35\Extensibility\LazyChecker.cs">
+      <Link>Extensibility\LazyChecker.cs</Link>
+    </Compile>
     <Compile Include="..\NFluent.35\Extensions\EnumerableExtensions.cs">
       <Link>Extensions\EnumerableExtensions.cs</Link>
     </Compile>
@@ -235,6 +238,12 @@
     </Compile>
     <Compile Include="..\NFluent.35\IWithValue.cs">
       <Link>IWithValue.cs</Link>
+    </Compile>
+    <Compile Include="..\NFluent.35\LazyChecks.cs">
+      <Link>LazyChecks.cs</Link>
+    </Compile>
+    <Compile Include="..\NFluent.35\LazyFluentCheck.cs">
+      <Link>LazyFluentCheck.cs</Link>
     </Compile>
     <Compile Include="..\NFluent.35\NullableOrNumberCheckLink.cs">
       <Link>NullableOrNumberCheckLink.cs</Link>
@@ -354,7 +363,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="3a474510-f384-41ce-9270-539b1e51da7e" />
+      <UserProperties ProjectLinkReference="3a474510-f384-41ce-9270-539b1e51da7e" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -63,6 +63,7 @@
     <Compile Include="Assertions\DoubleSpecificCheckExtensions.cs" />
     <Compile Include="Assertions\EventWaitHandleCheckExtensions.cs" />
     <Compile Include="Assertions\ObjectFieldsCheckExtensions.cs" />
+    <Compile Include="Extensibility\LazyChecker.cs" />
     <Compile Include="FluentCodeCheck.cs" />
     <Compile Include="Extensibility\ExtensibilityHelper.cs" />
     <Compile Include="Assertions\IntSignedCheckExtensions.cs" />
@@ -79,6 +80,8 @@
     <Compile Include="IMustImplementIForkableCheckWithoutDisplayingItsMethodsWithinIntelliSense.cs" />
     <Compile Include="Assertions\LambdaExceptionCheck.cs" />
     <Compile Include="IWithValue.cs" />
+    <Compile Include="LazyChecks.cs" />
+    <Compile Include="LazyFluentCheck.cs" />
     <Compile Include="RunTrace.cs" />
     <Compile Include="RunTraceResult.cs" />
     <Compile Include="T4\DecimalSignedCheckExtensions.cs">
