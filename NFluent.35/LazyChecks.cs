@@ -82,12 +82,22 @@ namespace NFluent
 
             if (fluentExceptions.Count > 0)
             {
-                var exceptionStatus = new StringBuilder();
+                var exceptionStatus = new StringBuilder(fluentExceptions.Count.ToString());
+                if (fluentExceptions.Count > 1)
+                {
+                    exceptionStatus.Append(" lazy checks failed:\n-----------");
+                }
+                else
+                {
+                    exceptionStatus.Append(" lazy check failed:\n-----------");
+                }
+
                 foreach (var fluentCheckException in fluentExceptions)
                 {
                     exceptionStatus.AppendLine(fluentCheckException.Message);
+                    exceptionStatus.Append("-----------");
                 }
-                throw new FluentCheckException("Something wrong happend: "+exceptionStatus.ToString());    
+                throw new FluentCheckException(exceptionStatus.ToString());    
             }
         }
     }

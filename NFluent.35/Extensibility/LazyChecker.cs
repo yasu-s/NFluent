@@ -122,10 +122,6 @@
         /// <exception cref="FluentCheckException">The check fails.</exception>
         public ICheckLink<TC> ExecuteCheck(Action action, string negatedExceptionMessage)
         {
-            // Should store the lambda
-            this.action = action;
-            this.negatedExceptionMessage = negatedExceptionMessage;
-
             this.ExecuteNotChainableCheck(action, negatedExceptionMessage);
             return this.BuildChainingObject();
         }

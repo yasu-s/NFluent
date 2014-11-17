@@ -14,6 +14,8 @@
 // // --------------------------------------------------------------------------------------------------------------------
 namespace NFluent.Tests
 {
+    using System;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -22,15 +24,42 @@ namespace NFluent.Tests
         [Test]
         public void ShouldExecuteAllRegisteredChecksInOnce()
         {
-            var hero = new Person() { Age = 40, Name = "Thomas", Nationality = Nationality.American};
-
+            var bienOuBien = true;
             var lazyChecks = new LazyChecks();
 
+            lazyChecks.That(bienOuBien).IsTrue();
+            lazyChecks.That('c').IsALetter();
+
+            lazyChecks.Execute();
+        }
+
+        [Test]
+        [ExpectedException(typeof(FluentCheckException), ExpectedMessage = "2 lazy checks failed:\n-----------\nThe checked boolean is true whereas it must be false.\nThe checked boolean:\n\t[True]\n-----------\nThe checked char is not a letter.\nThe checked char:\n\t['.']\n-----------")]
+        public void ShouldRaiseAllFailuresInOneShotAtTheEnd()
+        {
+            var bienOuBien = true;
+            var lazyChecks = new LazyChecks();
+
+            lazyChecks.That(bienOuBien).IsFalse();
+            lazyChecks.That('.').IsALetter();
+
+            lazyChecks.Execute();
+        }
+
+        [Test]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void ShouldNotWorkProperlyWhenAtLeastOneLazyCheckIsImplementedWithoutChecker()
+        {
+            var hero = new Person() { Age = 40, Name = "Thomas", Nationality = Nationality.American };
+            var bienOuBien = true;
+            var lazyChecks = new LazyChecks();
+           
+            lazyChecks.That(bienOuBien).IsTrue();
+            lazyChecks.That('c').IsALetter();
             lazyChecks.That(hero.Name).Contains("oma");
-            lazyChecks.That(hero).IsNotNull();
             lazyChecks.That(hero).IsInstanceOf<Person>();
-            //lazyChecks.That(hero).IsNotNull().And.Not.IsInstanceOf<Person>();
-            
+            // lazyChecks.That(hero).IsNotNull().And.Not.IsInstanceOf<Person>();
+
             lazyChecks.Execute();
         }
     }
