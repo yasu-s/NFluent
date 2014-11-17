@@ -18,12 +18,25 @@ namespace NFluent
     using System.Collections.Generic;
     using System.Text;
 
+    using NFluent.Extensibility;
+
     /// <summary>
     /// Allows to add lazy fluent checks to execute them afterward all in once via an <see cref="Execute"/> method.
     /// </summary>
     public class LazyChecks
     {
-        private readonly List<Action> lazyChecksLambdas = new List<Action>();
+        private readonly List<Action> lazyChecksLambdas;
+
+        // private readonly LazyCheckerAggregator lazyCheckerAggregator;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LazyChecks"/> class.
+        /// </summary>
+        public LazyChecks()
+        {
+            this.lazyChecksLambdas = new List<Action>();
+            // this.lazyCheckerAggregator = new LazyCheckerAggregator();
+        }
 
         /// <summary>
         /// Returns a <see cref="ICheck{T}" /> instance that will provide check methods to be executed on a given value.
@@ -40,6 +53,7 @@ namespace NFluent
         {
             //Action newCheck = () => Check.That(value);
             var lazyCheck = new LazyFluentCheck<T>(value);
+            //this.lazyCheckerAggregator.Add(lazyCheck.Checker);
             
             this.lazyChecksLambdas.Add(lazyCheck.Execute);
 
@@ -77,4 +91,17 @@ namespace NFluent
             }
         }
     }
+
+    ///// <summary>
+    ///// Aggregates <see cref="LazyChecker{T,TC}"/> instances to control them all.
+    ///// </summary>
+    //internal class LazyCheckerAggregator
+    //{
+    //    private readonly List<LazyChecker<object, ICheck<object>>> lazyCheckers = new List<LazyChecker<object, ICheck<object>>>();
+
+    //    public void Add(LazyChecker<object, ICheck<object>> checker)
+    //    {
+    //        this.lazyCheckers.Add(checker);
+    //    }
+    //}
 }

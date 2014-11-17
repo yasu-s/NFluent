@@ -13,6 +13,8 @@ namespace NFluent
     /// </typeparam>
     internal class LazyFluentCheck<T> : IForkableCheck, ICheck<T>, ICheckForExtensibility<T, ICheck<T>>
     {
+        private readonly LazyChecker<T, ICheck<T>> checker;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LazyFluentCheck{T}"/> class.
         /// </summary>
@@ -20,7 +22,7 @@ namespace NFluent
         public LazyFluentCheck(T value)
         {
             this.Value = value;
-            this.Checker = new LazyChecker<T, ICheck<T>>(this);
+            this.checker = new LazyChecker<T, ICheck<T>>(this);
         }
 
         #region Explicit Interface Methods
@@ -68,13 +70,27 @@ namespace NFluent
         /// </value>
         public T Value { get; private set; }
 
-        public IChecker<T, ICheck<T>> Checker { get; private set; }
+        public IChecker<T, ICheck<T>> Checker
+        {
+            get
+            {
+                return this.checker;
+            }
+        }
+
+        public LazyChecker<T, ICheck<T>> LazyChecker
+        {
+            get
+            {
+                return this.checker;
+            }
+        }
 
         public bool Negated { get; private set; }
 
         public void Execute()
         {
-            throw new InvalidTimeZoneException(string.Format("Value is '{0}'", this.Value));
+            this.checker.LazyExecuteForReal();
         }
     }
 }

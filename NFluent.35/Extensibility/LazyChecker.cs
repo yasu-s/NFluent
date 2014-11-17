@@ -16,6 +16,10 @@
 
         private readonly ICheckForExtensibility<T, TC> fluentCheckForExtensibility;
 
+        private Action action;
+
+        private string negatedExceptionMessage;
+
         #endregion
 
         #region constructor
@@ -118,6 +122,10 @@
         /// <exception cref="FluentCheckException">The check fails.</exception>
         public ICheckLink<TC> ExecuteCheck(Action action, string negatedExceptionMessage)
         {
+            // Should store the lambda
+            this.action = action;
+            this.negatedExceptionMessage = negatedExceptionMessage;
+
             this.ExecuteNotChainableCheck(action, negatedExceptionMessage);
             return this.BuildChainingObject();
         }
@@ -132,13 +140,19 @@
         /// <exception cref="FluentCheckException">The check fails.</exception>
         public void ExecuteNotChainableCheck(Action action, string negatedExceptionMessage)
         {
-            // Should store or forward the lambda
+            // Should store the lambda
+            this.action = action;
+            this.negatedExceptionMessage = negatedExceptionMessage;
+        }
 
+        #endregion
+
+        public void LazyExecuteForReal()
+        {
             try
             {
-                // TODO: do something!!!!
                 // execute test
-                // action();
+                this.action();
             }
             catch (FluentCheckException)
             {
@@ -155,10 +169,8 @@
             if (this.fluentCheckForExtensibility.Negated)
             {
                 // the expected exception did not occur
-                throw new FluentCheckException(negatedExceptionMessage);
+                throw new FluentCheckException(this.negatedExceptionMessage);
             }
         }
-
-        #endregion
     }
 }
