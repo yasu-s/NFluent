@@ -94,8 +94,8 @@ namespace NFluent
 
                 foreach (var fluentCheckException in fluentExceptions)
                 {
-                    exceptionStatus.AppendLine(fluentCheckException.Message);
-                    exceptionStatus.Append("-----------");
+                    exceptionStatus.Append(fluentCheckException.Message);
+                    exceptionStatus.Append("\n-----------");
                 }
                 throw new FluentCheckException(exceptionStatus.ToString());    
             }
