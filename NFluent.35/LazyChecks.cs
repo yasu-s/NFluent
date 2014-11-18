@@ -46,8 +46,7 @@ namespace NFluent
         /// </remarks>
         public ICheck<T> That<T>(T value)
         {
-            var lazyCheck = new LazyFluentCheck<T>(value);
-            this.lazyChecksLambdas.Add(lazyCheck.Execute);
+            var lazyCheck = new LazyFluentCheck<T>(value, this.lazyChecksLambdas);
 
             return lazyCheck;
         }

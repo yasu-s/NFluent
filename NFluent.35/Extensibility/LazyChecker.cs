@@ -138,6 +138,10 @@
         {
             // Should store the lambda & the negated exception message
             this.action = action;
+            
+            // Should store the Negated value that will be overriden by possible next statements otherwise
+
+
             this.negatedExceptionMessage = negatedExceptionMessage;
         }
 
@@ -147,6 +151,17 @@
         {
             try
             {
+                var foundIt = false;
+                if (this.fluentCheckForExtensibility.Negated)
+                {
+                    foundIt = true;
+                }
+
+                if (foundIt)
+                {
+                    
+                }
+
                 // execute test
                 if (this.action != null) // note: action can be null for LazyFluentCheck instances related to Not operators 
                 {

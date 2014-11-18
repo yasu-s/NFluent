@@ -15,6 +15,7 @@
 namespace NFluent
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
     using NFluent.Extensibility;
@@ -31,11 +32,14 @@ namespace NFluent
     {
         private readonly LazyChecker<T, ICheck<T>> checker;
 
+        private List<Action> realChecksLambdas;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LazyFluentCheck{T}"/> class.
         /// </summary>
         /// <param name="value">The value.</param>
-        public LazyFluentCheck(T value) : this(value, !CheckContext.DefaulNegated)
+        /// <param name="lazyChecksLambdas"></param>
+        public LazyFluentCheck(T value, List<Action> lazyChecksLambdas) : this(value, !CheckContext.DefaulNegated, lazyChecksLambdas)
         {
         }
 
@@ -44,13 +48,20 @@ namespace NFluent
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="negated">
-        /// A boolean value indicating whether the check should be negated or not.
+        ///     A boolean value indicating whether the check should be negated or not.
         /// </param>
-        public LazyFluentCheck(T value, bool negated)
+        /// <param name="realChecksLambdas"></param>
+        public LazyFluentCheck(T value, bool negated, List<Action> realChecksLambdas)
         {
             this.Value = value;
             this.Negated = negated;
             this.checker = new LazyChecker<T, ICheck<T>>(this);
+           
+            // Remembers the list with all the "real" check lambdas (the one that will be executed at the end of the day) so that we can propagate it among the chained checks
+            this.realChecksLambdas = realChecksLambdas;
+
+            // Registers our own "real" check method
+            this.realChecksLambdas.Add(this.Execute);
         }
 
         #region Explicit Interface Methods
@@ -67,8 +78,10 @@ namespace NFluent
         /// </remarks>
         object IForkableCheck.ForkInstance()
         {
-            this.Negated = !CheckContext.DefaulNegated;
-            return this;
+            var byDefaultNegatedIsFalse = !CheckContext.DefaulNegated;
+            // Important to instantiate a new object for lazy checks. 
+            // Indeed, we need to preserve the original Negated value for when it will be really executed (i.e. after the rest of the checks chain/link).
+            return new LazyFluentCheck<T>(this.Value, byDefaultNegatedIsFalse, this.realChecksLambdas);
         }
 
         #endregion
@@ -84,7 +97,7 @@ namespace NFluent
         {
             get
             {
-                return new LazyFluentCheck<T>(this.Value, CheckContext.DefaulNegated);
+                return new LazyFluentCheck<T>(this.Value, CheckContext.DefaulNegated, this.realChecksLambdas);
             }
         }
 
