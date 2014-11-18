@@ -22,13 +22,18 @@ namespace NFluent.Tests
     public class LazyChecksTests
     {
         [Test]
-        public void ShouldExecuteProperlyAllRegisteredChecksInOnce()
+        public void ShouldExecuteAllRegisteredChecksInOnceUpToTheExecuteMethodCall()
         {
             var bienOuBien = true;
+            var hero = new Person() { Age = 40, Name = "Thomas", Nationality = Nationality.American };
+
             var lazyChecks = new LazyChecks();
 
             lazyChecks.That(bienOuBien).IsTrue();
             lazyChecks.That('c').IsALetter();
+            lazyChecks.That(hero.Name).Contains("oma");
+            lazyChecks.That(hero).Not.IsInstanceOf<string>();
+            lazyChecks.That(hero).IsNotNull().And.IsInstanceOf<Person>();
 
             lazyChecks.Execute();
         }
@@ -66,22 +71,6 @@ namespace NFluent.Tests
 
             lazyChecks.That(true).Not.IsFalse().And.IsTrue();
             lazyChecks.That('C').Not.IsALetter();
-
-            lazyChecks.Execute();
-        }
-
-        [Test]
-        public void ShouldNotWorkProperlyWhenAtLeastOneLazyCheckIsImplementedWithoutChecker()
-        {
-            var hero = new Person() { Age = 40, Name = "Thomas", Nationality = Nationality.American };
-            
-            var lazyChecks = new LazyChecks();
-           
-            lazyChecks.That(true).IsTrue();
-            lazyChecks.That('c').IsALetter();
-            lazyChecks.That(hero.Name).Contains("oma");
-            lazyChecks.That(hero).Not.IsInstanceOf<string>();
-            lazyChecks.That(hero).IsNotNull().And.IsInstanceOf<Person>();
 
             lazyChecks.Execute();
         }
