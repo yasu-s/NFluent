@@ -54,12 +54,23 @@ namespace NFluent.Tests
 
             lazyChecks.That(bienOuBien).Not.IsFalse();
             lazyChecks.That('.').Not.IsALetter();
+            
+            lazyChecks.Execute();
+        }
+
+
+        [Test]
+        [ExpectedException(typeof(FluentCheckException))]
+        public void ShouldThrowIfARegisteredCheckFailedWithNotOperatorInvolved()
+        {
+            var lazyChecks = new LazyChecks();
+
+            lazyChecks.That('C').Not.IsALetter();
 
             lazyChecks.Execute();
         }
 
         [Test]
-        [ExpectedException(typeof(NullReferenceException))]
         public void ShouldNotWorkProperlyWhenAtLeastOneLazyCheckIsImplementedWithoutChecker()
         {
             var hero = new Person() { Age = 40, Name = "Thomas", Nationality = Nationality.American };

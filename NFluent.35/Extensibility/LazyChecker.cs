@@ -148,7 +148,10 @@
             try
             {
                 // execute test
-                this.action();
+                if (this.action != null) // note: action can be null for LazyFluentCheck instances related to Not operators 
+                {
+                    this.action();
+                }
             }
             catch (FluentCheckException)
             {
