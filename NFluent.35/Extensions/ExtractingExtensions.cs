@@ -19,6 +19,7 @@ namespace NFluent
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq.Expressions;
     using System.Reflection;
 
     /// <summary>
@@ -52,7 +53,20 @@ namespace NFluent
                 yield return value;
             }
         }
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumerable"></param>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        public static IEnumerable Extracting<T>(this IEnumerable<T> enumerable, Expression<Func<T, object>> property)
+        {
+            var propertyName = FindPropertyName(property);
+            return Extracting(enumerable, propertyName);
+        }
+
         /// <summary>
         /// Extract all the values of a given property given its name, from an enumerable collection of objects holding that property.
         /// </summary>
@@ -97,6 +111,39 @@ namespace NFluent
         public static IEnumerable Properties<T>(this T[] array, string propertyName)
         {
             return Extracting<T>(array, propertyName);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        public static IEnumerable Extracting<T>(this T[] array, Expression<Func<T, object>> property)
+        {
+            var propertyName = FindPropertyName(property);
+            return Extracting<T>(array, propertyName);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exp"></param>
+        /// <returns></returns>
+        private static string FindPropertyName(Expression exp)
+        {
+            switch (exp.NodeType)
+            {
+                case ExpressionType.MemberAccess:
+                    return ((MemberExpression)exp).Member.Name;
+                case ExpressionType.Lambda:
+                    return FindPropertyName(((LambdaExpression)exp).Body);
+                case ExpressionType.Convert:
+                    return FindPropertyName(((UnaryExpression)exp).Operand);
+                default:
+                    return null;
+            }
         }
     }
 }
